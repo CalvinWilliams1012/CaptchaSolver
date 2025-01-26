@@ -35,9 +35,12 @@ namespace CaptchaSolver
                 {
                     using (Image<L8> charImage = image.Clone(c => c.Crop(new Rectangle(i * 36, 0, rectangleWidth, rectangleHeight))))
                     {
-                        charImage.Save("C:/Users/calvi/source/repos/CaptchaSolver/output/CaptchaCharStart" + i + ".jpg");
+                        //charImage.Save("C:/Users/calvi/source/repos/CaptchaSolver/output/CaptchaCharStart" + i + ".jpg");
+                        //PreProcessor.Apply5x3Opening(charImage);
+                        //charImage.Save("C:/Users/calvi/source/repos/CaptchaSolver/output/CaptchaChar5x3Opened" + i + ".jpg");
                         PreProcessor.ApplyOpening(charImage);
-                        PreProcessor.ApplySharpen(charImage);
+                        charImage.Save("C:/Users/calvi/source/repos/CaptchaSolver/output/CaptchaChar3x3Opened" + i + ".jpg");
+                        //PreProcessor.ApplySharpen(charImage);
                         //PreProcessor.ApplyScaling(charImage);
                         TryProcessCharImage(charImage);
                         charImage.Save("C:/Users/calvi/source/repos/CaptchaSolver/output/CaptchaCharFinal" + i + ".jpg");
@@ -56,7 +59,7 @@ namespace CaptchaSolver
             using (var engine = new TesseractEngine("C:/Users/calvi/source/repos/CaptchaSolver/CaptchaSolver/tessdata", "eng", EngineMode.Default))
             {
                 engine.DefaultPageSegMode = PageSegMode.SingleChar;
-                engine.SetVariable("tessedit_char_whitelist", "0123456789");
+                engine.SetVariable("tessedit_char_whitelist", "tIil0123456789");
                 using (var streamedImage = new MemoryStream())
                 {
                     charImage.Save(streamedImage, new PngEncoder());
@@ -67,6 +70,10 @@ namespace CaptchaSolver
                             var text = p.GetText();
                             if (text != null && text.Length > 0)
                             {
+                                text = text.Replace('l', '1');
+                                text = text.Replace('I', '1');
+                                text = text.Replace('i', '1');
+                                text = text.Replace('t', '4');
                                 parsedString += text;
                                 return true;
                             }
