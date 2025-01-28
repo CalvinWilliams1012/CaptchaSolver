@@ -23,33 +23,19 @@ namespace CaptchaSolver.Processing
             image.Mutate(x => x.Resize(width, height));
         }
 
-        /* Opening/erosion/dialation with a 3x3 works best with a smaller image, either I needed to reverse scaling to process it, 
-         */
-        public static void ReverseScaling(Image<L8> image)
+        public static void ApplyThresholding(Image<L8> image)
         {
-            int width = image.Width / 10;
-            int height = image.Height / 10;
-            image.Mutate(x => x.Resize(width, height));
+            image.Mutate(x => x.BinaryThreshold(.53f));
         }
-        public static void ApplySharpen(Image<L8> image)
+
+        public static void ApplyBorder(Image<L8> image)
         {
-            image.Mutate(x => x.GaussianSharpen());
-        }
-        public static void ApplyBlur(Image<L8> image)
-        {
-            image.Mutate(x => x.GaussianBlur());
+            image.Mutate(x => x.Pad(46,60,Color.Black));
         }
 
         public static void ApplyEdgeDetection(Image<L8> image)
         {
             image.Mutate(x => x.DetectEdges());
-        }
-
-        public static void ApplyShrinkSharpenScale(Image<L8> image)
-        {
-            ReverseScaling(image);
-            ApplySharpen(image);
-            ApplyScaling(image);
         }
 
         #region Opening
@@ -63,13 +49,6 @@ namespace CaptchaSolver.Processing
             ApplyErosion3x3(image);
             ApplyDilation3x3(image);
             image.Mutate(x => x.Invert());
-        }
-
-        public static void ApplyShrinkOpenScale(Image<L8> image)
-        {
-            ReverseScaling(image);
-            ApplyOpening(image);
-            ApplyScaling(image);
         }
 
         /* Grayscale Erosion https://en.wikipedia.org/wiki/Erosion_(morphology)
@@ -118,7 +97,6 @@ namespace CaptchaSolver.Processing
                 }
             });
         }
-
         public static void ApplyDilation3x3(Image<L8> target)
         {
             using var source = target.Clone();

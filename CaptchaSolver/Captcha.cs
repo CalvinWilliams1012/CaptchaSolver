@@ -1,5 +1,6 @@
 ﻿using CaptchaSolver.Processing;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -35,17 +36,14 @@ namespace CaptchaSolver
                 {
                     using (Image<L8> charImage = image.Clone(c => c.Crop(new Rectangle(i * 36, 0, rectangleWidth, rectangleHeight))))
                     {
-                        //charImage.Save("C:/Users/calvi/source/repos/CaptchaSolver/output/CaptchaCharStart" + i + ".jpg");
-                        //PreProcessor.Apply5x3Opening(charImage);
-                        //charImage.Save("C:/Users/calvi/source/repos/CaptchaSolver/output/CaptchaChar5x3Opened" + i + ".jpg");
+
                         PreProcessor.ApplyOpening(charImage);
-                        charImage.Save("C:/Users/calvi/source/repos/CaptchaSolver/output/CaptchaChar3x3Opened" + i + ".jpg");
-                        //PreProcessor.ApplySharpen(charImage);
-                        //PreProcessor.ApplyScaling(charImage);
+                        PreProcessor.ApplyThresholding(charImage);
                         TryProcessCharImage(charImage);
                         charImage.Save("C:/Users/calvi/source/repos/CaptchaSolver/output/CaptchaCharFinal" + i + ".jpg");
                     }
                 }
+                //OCR may add whitespace, remove it before returning!
                 return parsedString.Replace("\n",String.Empty);
             }
             else
@@ -58,8 +56,16 @@ namespace CaptchaSolver
         {
             using (var engine = new TesseractEngine("C:/Users/calvi/source/repos/CaptchaSolver/CaptchaSolver/tessdata", "eng", EngineMode.Default))
             {
+                //We want tesseract to only look for a single character
                 engine.DefaultPageSegMode = PageSegMode.SingleChar;
-                engine.SetVariable("tessedit_char_whitelist", "tIil0123456789");
+                //and we only want to match the following characters.
+                engine.SetVariable("tessedit_char_whitelist", "!|Iilt0123456789");
+                /* 
+                 * You'll notice 'tIil' which were added to improve accuracy of 1 and 4's
+                 * The 1's and 4's would occasionally be missed
+                 * 4 is similar to the 't' character, so if OCR finds this, we replace with 4
+                 * 1 is similar to '!|Iil', so if we find this, replace with 1
+                 */
                 using (var streamedImage = new MemoryStream())
                 {
                     charImage.Save(streamedImage, new PngEncoder());
@@ -70,6 +76,8 @@ namespace CaptchaSolver
                             var text = p.GetText();
                             if (text != null && text.Length > 0)
                             {
+                                text = text.Replace('!', '1');
+                                text = text.Replace('|', '1');
                                 text = text.Replace('l', '1');
                                 text = text.Replace('I', '1');
                                 text = text.Replace('i', '1');
