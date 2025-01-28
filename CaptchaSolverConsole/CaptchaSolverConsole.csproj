@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AICaptchaSolver\AICaptchaSolver.csproj" />
     <ProjectReference Include="..\CaptchaSolver\CaptchaSolver.csproj" />
   </ItemGroup>
 

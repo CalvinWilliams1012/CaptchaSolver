@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaptchaSolver", "CaptchaSolver\CaptchaSolver.csproj", "{321E82D7-283D-426C-9380-5246C8C66AB7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaptchaSolverConsole", "CaptchaSolverConsole\CaptchaSolverConsole.csproj", "{545D4FFA-0694-405B-B6F8-A05A55EC23D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AICaptchaSolver", "AICaptchaSolver\AICaptchaSolver.csproj", "{1AE37523-90EA-4E44-B52B-91E55A9471F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{545D4FFA-0694-405B-B6F8-A05A55EC23D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{545D4FFA-0694-405B-B6F8-A05A55EC23D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{545D4FFA-0694-405B-B6F8-A05A55EC23D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AE37523-90EA-4E44-B52B-91E55A9471F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AE37523-90EA-4E44-B52B-91E55A9471F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AE37523-90EA-4E44-B52B-91E55A9471F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AE37523-90EA-4E44-B52B-91E55A9471F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
