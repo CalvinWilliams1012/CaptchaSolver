@@ -32,13 +32,13 @@ namespace CaptchaSolver
         {
             if (image != null && image.Bounds.Width == 180 && image.Bounds.Height == 50)
             {
+                PreProcessor.ApplyThresholding(image);
+                PreProcessor.ApplyOpening(image);
+
                 for (int i = 0; i < 5; i++)
                 {
                     using (Image<L8> charImage = image.Clone(c => c.Crop(new Rectangle(i * 36, 0, rectangleWidth, rectangleHeight))))
                     {
-
-                        PreProcessor.ApplyOpening(charImage);
-                        PreProcessor.ApplyThresholding(charImage);
                         TryProcessCharImage(charImage);
                         charImage.Save("C:/Users/calvi/source/repos/CaptchaSolver/output/CaptchaCharFinal" + i + ".jpg");
                     }
